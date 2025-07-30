@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsMongoId, IsString } from "class-validator";
 
 export class CreatePostDto {
   @IsString()
@@ -7,6 +7,6 @@ export class CreatePostDto {
   @IsString()
   content: string;
 
-  @IsString()
+  @IsMongoId()
   categoryId: string;
 }
