@@ -6,11 +6,9 @@ import { ConfigModule } from '@nestjs/config';
 import { CategoryModule } from './modules/category/category.module';
 import { PostModule } from './modules/post/post.module';
 import { PrismaService } from './prisma/prisma.service';
-<<<<<<< Updated upstream
 import { PricingsModule } from './modules/pricings/pricings.module';
-=======
+
 import { CommentModule } from './modules/comment/comment.module';
->>>>>>> Stashed changes
 
 @Module({
   imports: [
@@ -22,11 +20,8 @@ import { CommentModule } from './modules/comment/comment.module';
 
     PostModule,
 
-<<<<<<< Updated upstream
-    PricingsModule
-=======
+    PricingsModule,
     CommentModule
->>>>>>> Stashed changes
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
