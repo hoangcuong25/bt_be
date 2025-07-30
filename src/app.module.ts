@@ -9,19 +9,17 @@ import { PrismaService } from './prisma/prisma.service';
 import { PricingsModule } from './modules/pricings/pricings.module';
 
 import { CommentModule } from './modules/comment/comment.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-
     PrismaModule,
-
     CategoryModule,
-
     PostModule,
-
     PricingsModule,
-    CommentModule
+    CommentModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

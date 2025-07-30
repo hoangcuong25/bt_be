@@ -47,10 +47,10 @@ model Comment {
 }
 model PricingPlan {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String   
-  description String   
-  price       Float    
-  currency    String   @default("VND") 
+  name        String
+  description String
+  price       Float
+  currency    String   @default("VND")
   period      String   @default("month")
   features    Feature[]
   createdAt   DateTime @default(now())
@@ -58,6 +58,13 @@ model PricingPlan {
 }
 
 type Feature {
-  name     String 
-  included Boolean @default(false) 
+  name     String
+  included Boolean @default(false)
+}
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
