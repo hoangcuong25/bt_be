@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CategoryModule } from './modules/category/category.module';
 import { PostModule } from './modules/post/post.module';
 import { PrismaService } from './prisma/prisma.service';
+import { PricingsModule } from './modules/pricings/pricings.module';
 
 @Module({
   imports: [
@@ -15,7 +16,9 @@ import { PrismaService } from './prisma/prisma.service';
 
     CategoryModule,
 
-    PostModule
+    PostModule,
+
+    PricingsModule
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

@@ -45,3 +45,19 @@ model Comment {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
+model PricingPlan {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   
+  description String   
+  price       Float    
+  currency    String   @default("VND") 
+  period      String   @default("month")
+  features    Feature[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+type Feature {
+  name     String 
+  included Boolean @default(false) 
+}
