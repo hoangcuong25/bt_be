@@ -1,20 +1,35 @@
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException,UseGuards, Put, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException,UseGuards, Put, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Response } from 'express';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('post')
 export class PostController {
-  constructor(private readonly postService: PostService) { }
+  constructor(
+    private readonly postService: PostService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) { }
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createPostDto: CreatePostDto, @Res() res: Response) {
+  @UseInterceptors(FileInterceptor('file')) 
+  async create(
+    @Body() createPostDto: CreatePostDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response
+  ) {
     try {
-      const created = await this.postService.create(createPostDto);
+      let imageUrl = '';
+      if (file) {
+        const uploadResult = await this.cloudinaryService.uploadFile(file);
+        imageUrl = uploadResult.secure_url;
+      }
+      const created = await this.postService.create({ ...createPostDto, imageUrl });
       return res.status(HttpStatus.CREATED).json({
         statusCode: HttpStatus.CREATED,
         message: 'Post created successfully',

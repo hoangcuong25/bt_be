@@ -14,13 +14,11 @@ export class CategoryController {
     return this.categoryService.create(createCategoryDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {
     return this.categoryService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(id);

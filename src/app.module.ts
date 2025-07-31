@@ -10,6 +10,7 @@ import { PricingsModule } from './modules/pricings/pricings.module';
 
 import { CommentModule } from './modules/comment/comment.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './modules/auth/auth.module';
     CategoryModule,
     PostModule,
     PricingsModule,
+    CloudinaryModule,
     CommentModule,
     AuthModule
   ],

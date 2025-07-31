@@ -12,6 +12,7 @@ export class PostService {
         data: {
           title: createPostDto.title,
           content: createPostDto.content,
+          imageUrl: createPostDto.imageUrl || '',
           category: {
             connect: {
               id: createPostDto.categoryId

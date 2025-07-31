@@ -25,6 +25,7 @@ model Post {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   content    String
+  imageUrl   String
   category   Category  @relation(fields: [categoryId], references: [id])
   categoryId String    @db.ObjectId
   comments   Comment[]
