@@ -27,7 +27,7 @@ export class PostController {
   constructor(
     private readonly postService: PostService,
     private readonly cloudinaryService: CloudinaryService,
-  ) {}
+  ) { }
 
   @UseGuards(JwtAuthGuard)
   @Post()
