@@ -14,13 +14,11 @@ export class PricingsController {
     return this.pricingsService.create(createPricingDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('get-all')
   findAll() {
     return this.pricingsService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('get/:id')
   findOne(@Param('id') id: string) {
     return this.pricingsService.findOne(id);
