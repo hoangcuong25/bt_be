@@ -25,24 +25,46 @@ export class PostService {
     }
   }
 
-  async findAll() {
+  async findAll(page: number = 1, limit: number = 10) {
     try {
-      return await this.prisma.post.findMany({
+      console.log(`Bắt đầu findAll - Trang: ${page}, Giới hạn: ${limit}`);
+
+      const skip = (page - 1) * limit;
+
+      const posts = await this.prisma.post.findMany({
+        skip,
+        take: limit,
         include: {
           category: true,
-          comments: {
-            where: { parentId: null },
-            include: {
-              replies: true
-            }
-          }
-        }
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
       });
+
+      const totalPosts = await this.prisma.post.count();
+      const totalPages = Math.ceil(totalPosts / limit);
+
+      console.log(`Tìm thấy ${posts.length} bài viết trên tổng ${totalPosts} bài viết`);
+
+      return {
+        data: posts,
+        pagination: {
+          currentPage: page,
+          limit,
+          totalPosts,
+          totalPages,
+        },
+      };
     } catch (error) {
-      throw new HttpException('Failed to fetch posts', HttpStatus.INTERNAL_SERVER_ERROR)
+      console.error('Lỗi findAll:', {
+        message: error.message,
+        code: error.code,
+        meta: error.meta,
+      });
+      throw new HttpException('Không thể lấy danh sách bài viết', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
   async findOne(id: string) {
     try {
       const post = await this.prisma.post.findUnique({
