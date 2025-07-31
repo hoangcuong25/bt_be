@@ -1,6 +1,6 @@
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException,UseGuards, Put, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException, UseGuards, Put, Res } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -10,7 +10,7 @@ import { Response } from 'express';
 export class PostController {
   constructor(private readonly postService: PostService) { }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() createPostDto: CreatePostDto, @Res() res: Response) {
     try {
@@ -25,7 +25,7 @@ export class PostController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   async findAll(@Res() res: Response) {
     try {
@@ -39,7 +39,7 @@ export class PostController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() res: Response) {
     try {
@@ -53,8 +53,36 @@ export class PostController {
     }
   }
 
+  // @UseGuards(JwtAuthGuard)
+  @Get('category/:categoryId')
+  async findByCategory(@Param('categoryId') categoryId: string, @Res() res: Response) {
+    try {
+      const posts = await this.postService.findByCategory(categoryId)
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        data: posts
+      });
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
+  @Get('search/:query')
+  async searchPosts(@Param('query') query: string, @Res() res: Response) {
+    try {
+      const posts = await this.postService.searchPosts(query)
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        data: posts
+      });
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+
+  // @UseGuards(JwtAuthGuard)
   @Put(':id')
   async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto, @Res() res: Response) {
     try {
@@ -69,7 +97,7 @@ export class PostController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() res: Response) {
     try {
