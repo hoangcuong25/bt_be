@@ -22,7 +22,7 @@ import { Response } from "express";
 import { CloudinaryService } from "src/cloudinary/cloudinary.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 
-
+@Controller('post')
 export class PostController {
   constructor(
     private readonly postService: PostService,
