@@ -62,6 +62,45 @@ export class PostService {
     }
   }
 
+  async findByCategory(categoryId: string) {
+    try {
+      return await this.prisma.post.findMany({
+        where: { categoryId },
+        include: {
+          category: true,
+          comments: {
+            where: { parentId: null },
+            include: { replies: true }
+          }
+        }
+      })
+    } catch (error) {
+      throw new HttpException('Failed to fetch posts by category', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async searchPosts(query: string) {
+    try {
+      return await this.prisma.post.findMany({
+        where: {
+          OR: [
+            { title: { contains: query, mode: 'insensitive' } },
+            { content: { contains: query, mode: 'insensitive' } },
+          ]
+        },
+        include: {
+          category: true,
+          comments: {
+            where: { parentId: null },
+            include: { replies: true }
+          }
+        }
+      })
+    } catch (error) {
+
+    }
+  }
+
   async update(id: string, updatePostDto: UpdatePostDto) {
     try {
       const { categoryId, ...rest } = updatePostDto;
