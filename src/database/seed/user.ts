@@ -11,7 +11,9 @@ async function main() {
       password: hashedPassword,
     },
   });
-  console.log('Tài khoản admin đã được tạo với username: admin và mật khẩu: 123456');
+  console.log(
+    'Tài khoản admin đã được tạo với username: admin và mật khẩu: 123456'
+  );
 }
 
 main()

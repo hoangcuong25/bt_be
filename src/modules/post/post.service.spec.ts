@@ -66,12 +66,14 @@ describe('PostService', () => {
     it('should throw HttpException on failure', async () => {
       mockPrisma.post.create.mockRejectedValue(new Error());
 
-      await expect(service.create({
-        title: 'x',
-        content: 'x',
-        imageUrl: 'x',
-        categoryId: 'x',
-      })).rejects.toThrow(HttpException);
+      await expect(
+        service.create({
+          title: 'x',
+          content: 'x',
+          imageUrl: 'x',
+          categoryId: 'x',
+        })
+      ).rejects.toThrow(HttpException);
     });
   });
 
@@ -113,7 +115,9 @@ describe('PostService', () => {
       mockPrisma.post.delete.mockResolvedValue({ id: '1' });
 
       await service.remove('1');
-      expect(mockPrisma.post.delete).toHaveBeenCalledWith({ where: { id: '1' } });
+      expect(mockPrisma.post.delete).toHaveBeenCalledWith({
+        where: { id: '1' },
+      });
     });
 
     it('should throw if post not found', async () => {

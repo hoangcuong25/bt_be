@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PostService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
   async create(createPostDto: CreatePostDto) {
     try {
       return await this.prisma.post.create({
@@ -15,13 +15,13 @@ export class PostService {
           imageUrl: createPostDto.imageUrl || '',
           category: {
             connect: {
-              id: createPostDto.categoryId
-            }
-          }
+              id: createPostDto.categoryId,
+            },
+          },
         },
       });
     } catch (error) {
-      throw new HttpException('Failed to create post', HttpStatus.BAD_REQUEST)
+      throw new HttpException('Failed to create post', HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -45,7 +45,9 @@ export class PostService {
       const totalPosts = await this.prisma.post.count();
       const totalPages = Math.ceil(totalPosts / limit);
 
-      console.log(`Tìm thấy ${posts.length} bài viết trên tổng ${totalPosts} bài viết`);
+      console.log(
+        `Tìm thấy ${posts.length} bài viết trên tổng ${totalPosts} bài viết`
+      );
 
       return {
         data: posts,
@@ -62,7 +64,10 @@ export class PostService {
         code: error.code,
         meta: error.meta,
       });
-      throw new HttpException('Không thể lấy danh sách bài viết', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Không thể lấy danh sách bài viết',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
   async findOne(id: string) {
@@ -75,9 +80,9 @@ export class PostService {
             where: { parentId: null },
             include: {
               replies: true,
-            }
-          }
-        }
+            },
+          },
+        },
       });
       return post;
     } catch (error) {
@@ -93,12 +98,15 @@ export class PostService {
           category: true,
           comments: {
             where: { parentId: null },
-            include: { replies: true }
-          }
-        }
-      })
+            include: { replies: true },
+          },
+        },
+      });
     } catch (error) {
-      throw new HttpException('Failed to fetch posts by category', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        'Failed to fetch posts by category',
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -109,19 +117,17 @@ export class PostService {
           OR: [
             { title: { contains: query, mode: 'insensitive' } },
             { content: { contains: query, mode: 'insensitive' } },
-          ]
+          ],
         },
         include: {
           category: true,
           comments: {
             where: { parentId: null },
-            include: { replies: true }
-          }
-        }
-      })
-    } catch (error) {
-
-    }
+            include: { replies: true },
+          },
+        },
+      });
+    } catch (error) {}
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
@@ -144,10 +150,10 @@ export class PostService {
     }
   }
   async remove(id: string) {
-    const found = await this.prisma.post.findUnique({ where: { id } })
+    const found = await this.prisma.post.findUnique({ where: { id } });
     if (!found) {
       throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
     }
-    await this.prisma.post.delete({ where: { id } })
+    await this.prisma.post.delete({ where: { id } });
   }
 }

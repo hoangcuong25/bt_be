@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto} from './dto/update-comment.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -26,16 +26,15 @@ export class CommentService {
     });
   }
   async update(id: string, dto: UpdateCommentDto) {
-  return this.prisma.comment.update({
-    where: { id },
-    data: dto,
-  });
-}
+    return this.prisma.comment.update({
+      where: { id },
+      data: dto,
+    });
+  }
 
-async remove(id: string) {
-  return this.prisma.comment.delete({
-    where: { id },
-  });
-}
-
+  async remove(id: string) {
+    return this.prisma.comment.delete({
+      where: { id },
+    });
+  }
 }

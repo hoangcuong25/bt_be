@@ -21,9 +21,9 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     PricingsModule,
     CloudinaryModule,
     CommentModule,
-    AuthModule
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
-export class AppModule { }
+export class AppModule {}

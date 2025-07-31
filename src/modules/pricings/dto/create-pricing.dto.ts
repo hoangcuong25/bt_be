@@ -1,4 +1,10 @@
-import { IsString, IsNumber, IsArray, IsObject, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsArray,
+  IsObject,
+  IsOptional,
+} from 'class-validator';
 
 export class FeatureDto {
   @IsString()
