@@ -22,7 +22,7 @@ import { Response } from "express";
 import { CloudinaryService } from "src/cloudinary/cloudinary.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 
-@Controller("post")
+
 export class PostController {
   constructor(
     private readonly postService: PostService,
@@ -60,6 +60,7 @@ export class PostController {
     }
   }
 
+
   @Get()
   async findAll(@Res() res: Response) {
     try {
@@ -92,6 +93,33 @@ export class PostController {
     }
   }
 
+  @Get('category/:categoryId')
+  async findByCategory(@Param('categoryId') categoryId: string, @Res() res: Response) {
+    try {
+      const posts = await this.postService.findByCategory(categoryId)
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        data: posts
+      });
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Get('search/:query')
+  async searchPosts(@Param('query') query: string, @Res() res: Response) {
+    try {
+      const posts = await this.postService.searchPosts(query)
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        data: posts
+      });
+    } catch (error) {
+      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+
   @UseGuards(JwtAuthGuard)
   @Put(":id")
   @UseInterceptors(FileInterceptor("file"))
@@ -109,9 +137,7 @@ export class PostController {
 
       let newImageUrl = updatePostDto.imageUrl || currentPost.imageUrl;
 
-      // If new file is uploaded, handle image replacement
       if (file) {
-        // Delete old image from Cloudinary if it exists
         if (currentPost.imageUrl) {
           const oldPublicId = this.cloudinaryService.extractPublicId(
             currentPost.imageUrl,
@@ -146,6 +172,7 @@ export class PostController {
       );
     }
   }
+
 
   @UseGuards(JwtAuthGuard)
   @Delete(":id")
