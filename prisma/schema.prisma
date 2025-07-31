@@ -26,8 +26,8 @@ model Post {
   title      String
   content    String
   imageUrl   String
-  category   Category  @relation(fields: [categoryId], references: [id])
-  categoryId String    @db.ObjectId
+  category   Category?  @relation(fields: [categoryId], references: [id])
+  categoryId String?    @db.ObjectId
   comments   Comment[]
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
