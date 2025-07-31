@@ -14,6 +14,7 @@ import {
   Res,
   UploadedFile,
   UseInterceptors,
+  Query,
 } from "@nestjs/common";
 import { PostService } from "./post.service";
 import { CreatePostDto } from "./dto/create-post.dto";
@@ -22,7 +23,7 @@ import { Response } from "express";
 import { CloudinaryService } from "src/cloudinary/cloudinary.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 
-@Controller('post')
+@Controller("post")
 export class PostController {
   constructor(
     private readonly postService: PostService,
@@ -60,14 +61,21 @@ export class PostController {
     }
   }
 
-
   @Get()
-  async findAll(@Res() res: Response) {
+  async findAll(
+    @Query("page") page: string = "1",
+    @Query("limit") limit: string = "10",
+    @Res() res: Response,
+  ) {
     try {
-      const posts = await this.postService.findAll();
+      const pageNumber = parseInt(page, 10);
+      const limitNumber = parseInt(limit, 10);
+      const posts = await this.postService.findAll(pageNumber, limitNumber);
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
-        data: posts,
+        message: "Lấy danh sách bài viết thành công",
+        data: posts.data,
+        pagination: posts.pagination,
       });
     } catch (error) {
       throw new HttpException(
@@ -93,32 +101,40 @@ export class PostController {
     }
   }
 
-  @Get('category/:categoryId')
-  async findByCategory(@Param('categoryId') categoryId: string, @Res() res: Response) {
+  @Get("category/:categoryId")
+  async findByCategory(
+    @Param("categoryId") categoryId: string,
+    @Res() res: Response,
+  ) {
     try {
-      const posts = await this.postService.findByCategory(categoryId)
+      const posts = await this.postService.findByCategory(categoryId);
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
-        data: posts
+        data: posts,
       });
     } catch (error) {
-      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        error.message,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
-  @Get('search/:query')
-  async searchPosts(@Param('query') query: string, @Res() res: Response) {
+  @Get("search/:query")
+  async searchPosts(@Param("query") query: string, @Res() res: Response) {
     try {
-      const posts = await this.postService.searchPosts(query)
+      const posts = await this.postService.searchPosts(query);
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
-        data: posts
+        data: posts,
       });
     } catch (error) {
-      throw new HttpException(error.message, error.status || HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        error.message,
+        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
-
 
   @UseGuards(JwtAuthGuard)
   @Put(":id")
@@ -172,7 +188,6 @@ export class PostController {
       );
     }
   }
-
 
   @UseGuards(JwtAuthGuard)
   @Delete(":id")

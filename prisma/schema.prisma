@@ -25,7 +25,7 @@ model Post {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   title      String
   content    String
-  imageUrl   String
+  imageUrl   String?
   category   Category  @relation(fields: [categoryId], references: [id])
   categoryId String    @db.ObjectId
   comments   Comment[]
@@ -38,8 +38,8 @@ model Comment {
   name      String
   email     String
   content   String
-  post      Post?     @relation(fields: [postId], references: [id])
-  postId    String?   @db.ObjectId
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String   @db.ObjectId
   parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   parentId  String?   @db.ObjectId
   replies   Comment[] @relation("CommentReplies")
