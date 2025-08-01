@@ -84,9 +84,15 @@ export class PostService {
           },
         },
       });
+      if (!post) {
+        throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+      }
       return post;
     } catch (error) {
-      throw new HttpException('Post not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        error.message || 'Post not found',
+        error.status || HttpStatus.NOT_FOUND
+      );
     }
   }
 
@@ -127,7 +133,9 @@ export class PostService {
           },
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      return [];
+    }
   }
 
   async update(id: string, updatePostDto: UpdatePostDto) {
